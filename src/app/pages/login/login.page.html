@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="warning"></ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <div class="ion-text-center">
+        <ion-card-title>Iniciar sesión</ion-card-title>
+      </div>
+    </ion-card-header>
+    <ion-card-content>
+        <ion-item>
+          <ion-input [(ngModel)]="username" label="Usuario" labelPlacement="stacked" id="size20"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input [(ngModel)]="password" label="Contraseña" labelPlacement="stacked" id="size20" type="password">
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle> 
+          </ion-input> 
+        </ion-item>
+      <br>
+      <div class="ion-text-center">
+        <ion-button (click)="ingresoApp()" color="warning" id="boldStyle"><ion-icon name="log-in-outline" slot="end"></ion-icon>Ingresar</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="ion-text-center">
+    <a [routerLink]="['/pass-recovery']">Recuperar contraseña</a>
+  </div>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="warning">
+    
+  </ion-toolbar>
+</ion-footer>
+
+

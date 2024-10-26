@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar color="warning">
+    <ion-title>Inicio</ion-title>
+    <ion-button slot="end" [routerLink]="['/login']" color="light" id="boldStyle">Salir<ion-icon name="power" slot="start"></ion-icon></ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center">
+
+  <div>
+
+    <h3>Temperatura Mínima: {{ minTemp }}°C</h3>
+    <h3>Temperatura Máxima: {{ maxTemp }}°C</h3>
+
+    <!--Muestra el nombre del usuario-->
+    <p id="nombreUser">¡Bienvenido, {{username}}!</p>
+    <ion-icon name="person" id="iconUser"></ion-icon>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-button (click)="checkIfWithinRange()" class="submit" color="warning" id="boldStyle">
+          Confirmar asistencia
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <div *ngIf="isWithinRange !== null" class="resultado">
+      <p>Distancia de la sede: {{ distance | number:'1.2-2' }} km</p>
+      <p *ngIf="isWithinRange; else fueraRango">
+      </p>
+      <ng-template #fueraRango>
+        ❌ Estás fuera del rango de la sede.
+      </ng-template>
+    </div>
+
+    <h2>Latitud: {{ latitude }}</h2>
+    <h2>Longitud: {{ longitude }}</h2>
+
+</div>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="warning">
+    <ion-title id="boldStyle">Desarrollado por: Maximiliano P.</ion-title>
+  </ion-toolbar>
+</ion-footer>

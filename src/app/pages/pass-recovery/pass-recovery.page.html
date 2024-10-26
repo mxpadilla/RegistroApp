@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar color="warning"></ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+  <ion-card>
+    <ion-card-header>
+      <div class="ion-text-center">
+        <ion-card-title>Recuperar contraseña</ion-card-title>
+      </div>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-input [(ngModel)]="userRecovery" label="Nombre de Usuario" labelPlacement="stacked" id="size20"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input [(ngModel)]="passRecovery" label="Nueva Contraseña" labelPlacement="stacked" id="size20" type="password">
+          <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+        </ion-input>
+      </ion-item>
+      <br>
+      <div class="ion-text-center">
+        <ion-button color="warning" id="boldStyle" (click)="mostrarConfirmacion()">Recuperar</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="ion-text-center">
+    <ion-button (click)="volver()" color="warning" id="boldStyle">Volver al Inicio</ion-button>
+  </div>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="warning">
+    <ion-title id="boldStyle">Desarrollado por: Maximiliano P.</ion-title>
+  </ion-toolbar>
+</ion-footer>
