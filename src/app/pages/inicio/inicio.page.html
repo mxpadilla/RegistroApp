@@ -1,16 +1,30 @@
 <ion-header>
   <ion-toolbar color="warning">
-    <ion-title>Inicio</ion-title>
-    <ion-button slot="end" [routerLink]="['/login']" color="light" id="boldStyle">Salir<ion-icon name="power" slot="start"></ion-icon></ion-button>
+    <ion-title id="boldStyle" class="centrado">Inicio</ion-title>
+    <ion-button slot="end" (click)="confirmLogout()" color="light" class="boton-salir">Salir<ion-icon name="power" slot="start"></ion-icon></ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding ion-text-center">
 
   <div>
-
-    <h3>Temperatura Mínima: {{ minTemp }}°C</h3>
-    <h3>Temperatura Máxima: {{ maxTemp }}°C</h3>
+    <ion-card class="borde-card">
+      <ion-card color="warning">
+        <ion-title>
+          <h1>Temperatura actual</h1>
+        </ion-title>
+      </ion-card>
+      <ion-row class="termometro-size">
+        <ion-col size="6">
+          <img src="assets/images/termometro frio.jpg" alt="" width="40%"><br>
+          <div><span style="color: blue;">{{ minTemp }}</span>°C</div>
+        </ion-col>
+        <ion-col size="6">
+          <img src="assets/images/termometro calor.jpg" alt="" width="40%"><br>
+          <div class="calor"><span style="color: red;">{{ maxTemp }}</span>°C</div>
+        </ion-col>
+      </ion-row>
+    </ion-card>
 
     <!--Muestra el nombre del usuario-->
     <p id="nombreUser">¡Bienvenido, {{username}}!</p>
@@ -25,16 +39,21 @@
     </ion-row>
 
     <div *ngIf="isWithinRange !== null" class="resultado">
-      <p>Distancia de la sede: {{ distance | number:'1.2-2' }} km</p>
+      <!-- <p>Distancia de la sede: {{ distance | number:'1.2-2' }} km</p> -->
       <p *ngIf="isWithinRange; else fueraRango">
+        ⌛ Redireccionando en 3 segundos ⌛
       </p>
       <ng-template #fueraRango>
-        ❌ Estás fuera del rango de la sede.
+        <ion-text color="danger">
+          <h4>Debes estar en la sede para poder realizar esta acción</h4>
+        </ion-text>
       </ng-template>
     </div>
 
+    <!-- Test de ubicación actual en HTML
     <h2>Latitud: {{ latitude }}</h2>
     <h2>Longitud: {{ longitude }}</h2>
+    -->
 
 </div>
 

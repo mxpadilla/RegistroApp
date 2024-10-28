@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { User } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -22,18 +23,37 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  ingresoApp(){
-    //console.log("Prueba de ejecución")
+  validateLogin() {
+    console.log("Executing login validation")
 
-    if(this.loginService.validarLogin(this.username, this.password))
-    {
-      this.mensajeConfirmacion('Login acceptado','success');
-      let extras: NavigationExtras = {state: {user: this.username}}
-      this.router.navigate(['/inicio'], extras);
-    }
-    else{
-      this.mensajeConfirmacion('Login denegado','danger');
-    }
+    this.loginService
+      .authenticate(this.username, this.password)
+      .then(user => {
+        this.authenticateHandler(user);
+      })
+      .catch(err => {
+        console.log('Error en login: ', err)
+        this.failedAuthentication();
+      });
+  }
+
+  private authenticateHandler(user: User | null) {
+    user ? this.successAuthentication() : this.failedAuthentication()
+  }
+
+  private failedAuthentication(message: string = 'Sesión iniciada de forma fallida') {
+    this.mensajeConfirmacion(message, 'danger')
+      .then(() => { console.log('Login fallido') });
+  }
+
+  private successAuthentication() {
+    this.mensajeConfirmacion('Sesión iniciada de forma exitosa', 'success')
+      .then(() => {
+        console.log('Success login');
+        let extras: NavigationExtras = {state: {user: this.username}}
+        this.router.navigate(['/inicio'], extras);
+      })
+      .then(() => console.log('Redireccionando al inicio'));
   }
 
   //función que permite mostrar un mensaje según los parametros dados
@@ -46,5 +66,6 @@ export class LoginPage implements OnInit {
     });
     await toast.present();
   }
+
 
 }

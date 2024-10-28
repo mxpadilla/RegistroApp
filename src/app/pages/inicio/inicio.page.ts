@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+import { LoginService } from 'src/app/services/login.service';
 import { NavegacionService } from 'src/app/services/navegacion.service';
 import { TemperaturaService } from 'src/app/services/temperatura.service';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
@@ -24,7 +26,6 @@ export class InicioPage implements OnInit {
   // Variable para latitud y longitud
   latitude: number = 0;
   longitude: number = 0;
-  address: string = '';
 
   /*
     Variables para detectar rango de la ubicación donde:
@@ -33,10 +34,10 @@ export class InicioPage implements OnInit {
       3. Se obtiene la distancia restante calculada
   */
   isWithinRange: boolean | null = null;  
-  distance: number | null = null;
-  difDistance: number = 0;
+  distancia: number = 0;
+  difDistancia: number = 0;
   
-  // Variables objetivo (Latitud, Longitud, rango deseado en km)
+  // Variables objetivo (Latitud, Longitud y rango deseado en km)
   // Ejemplo: Sede Duoc San Joaquín (estimado)
   targetLat = -33.4999675;  
   targetLon = -70.6164588;
@@ -46,7 +47,9 @@ export class InicioPage implements OnInit {
     private router: Router,
     private navegacion: NavegacionService,
     private clima: TemperaturaService,
-    private ubicacion: UbicacionService
+    private ubicacion: UbicacionService,
+    private alertController: AlertController,
+    private loginService: LoginService
   ) { 
     const state = this.router.getCurrentNavigation()?.extras?.state;
     if(state){
@@ -102,7 +105,7 @@ export class InicioPage implements OnInit {
   async checkIfWithinRange() {
     try {
       await this.getCurrentPosition();
-      this.distance = this.calculateDistance(
+      this.distancia = this.calculateDistance(
         this.latitude,
         this.longitude,
         this.targetLat,
@@ -110,10 +113,10 @@ export class InicioPage implements OnInit {
       )
       
       //Distancia entre la ubicación objetivo y actual del usuario
-      this.difDistance = this.distance - this.rangeKm;
+      this.difDistancia = this.distancia - this.rangeKm;
 
       // Actualizamos el estado de 'isWithinRange'
-      this.isWithinRange = this.distance <= this.rangeKm;
+      this.isWithinRange = this.distancia <= this.rangeKm;
     } catch (error) {
       console.error('Error al verificar la ubicación:', error);
       this.isWithinRange = null;
@@ -121,13 +124,16 @@ export class InicioPage implements OnInit {
 
     // Si se cumple esta condición, se realiza la redirección de forma automática
     if (this.isWithinRange === true) {
+      console.log(`Latitud: ${this.latitude} | Longitud: ${this.longitude}`)
       setTimeout(() => {
         this.router.navigate(['/codigo-qr']);
       }, 3000);  
     }
     else {
-      // En caso contrario, se muestra la distancia restante en la consola
-      console.log(`Distancia restante: ${this.difDistance.toFixed(2)} km`) 
+      // En caso contrario, se muestra la distancia objetivo, distancia restante y ubicación actual en la consola
+      console.log(`Distancia de la sede: ${this.distancia.toFixed(2)} km`);
+      console.log(`Distancia restante: ${this.difDistancia.toFixed(2)} km`);
+      console.log(`Latitud: ${this.latitude} | Longitud: ${this.longitude}`)
     }
   }
 
@@ -146,5 +152,31 @@ export class InicioPage implements OnInit {
       
   }
 
+  //Función para cerrar sesión del usuario
+  confirmLogout(){
+    this.alertController.create({
+      header: 'Cerrar sesión',
+      message: '¿Esta seguro de cerrar la sesión?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary'
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+            this.logout();
+          }
+        }
+      ]
+    })
+    .then(a => a.present());
+  }
 
+  private logout(){
+    this.loginService.logout()
+    this.router.navigateByUrl('/login');
+  }
+
+  
 }

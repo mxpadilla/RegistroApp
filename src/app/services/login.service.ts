@@ -1,23 +1,63 @@
 import { Injectable } from '@angular/core';
 import { User }  from '../models/user';
+import { StorageService } from './almacenamiento.service';
+import { UserService } from './usuario.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  users: User[] = [
-    new User('UserTest','12345'),
-    new User('Maximiliano','54321'),
-    new User('Fernanda','67890')
-  ]
+  loggedUser: User | null = null;
+  isLogged: boolean = false;
 
-  constructor() { }
+  private readonly logged_user_key = 'logged_user';
 
-  validarLogin(username: string, password: string): boolean {
-    console.log("[LoginService] => validarLogin")
+  constructor(
+    private readonly storageService: StorageService,
+    private readonly userService: UserService
+  ) { }
 
-    return this.users.find(u => 
-      u.username === username && u.password === password) !== undefined
+  async authenticate(u: string, p: string): Promise<User | null> {
+    const founds = await firstValueFrom(this.userService.findUserByUsername(u));
+
+    if (founds.length > 0) {
+      const found = founds[0]
+      console.log('It found user: ', found.username)
+      const matchPwd = found.password === p;
+      if (matchPwd) {
+        this.loggedUser = found;
+        this.isLogged = true;
+        await this.storageService.set(this.logged_user_key, this.loggedUser);
+      }
+      return found
+    }
+    console.log('It didn\'t find user', u);
+    return null;
+  }
+
+  async isAuthenticated() {
+    console.log(this.loggedUser)
+    console.log(this.isLogged)
+    const userInMemory = this.loggedUser !== null;
+    console.log("user exist: " + userInMemory)
+    if (!userInMemory) {
+      const user = await this.storageService.get(this.logged_user_key);
+      if (user) {
+        console.log('LoginService encontró el usuario')
+        this.isLogged = true;
+        this.loggedUser = user;
+      }
+    }
+    return this.isLogged;
+  }
+
+  async logout() {
+    this.loggedUser = null;
+    this.isLogged = false;
+    return this.storageService
+      .remove(this.logged_user_key)
+      .then(() => console.log('Usuario eliminado del almacenamiento'));
   }
 }

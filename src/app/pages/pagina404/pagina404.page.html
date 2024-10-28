@@ -1,19 +1,13 @@
-
 <ion-toolbar class="ion-text-center">
-  <ion-title>Página no encontrada</ion-title>
+  <ion-title id="boldStyle">Página no encontrada</ion-title>
 </ion-toolbar>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Página no encontrada</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
 
   <div class="ion-text-center">
     <h1>Error 404</h1>
     <p>Lo sentimos, la página que buscas no existe.</p>
-    <ion-button slot="start" [routerLink]="['/login']" color="warning" id="boldStyle">Volver al login</ion-button>
+    <ion-button slot="start" [routerLink]="['/login']" color="medium" id="boldStyle">Volver al login</ion-button>
   </div>
   
 </ion-content>
