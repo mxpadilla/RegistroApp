@@ -45,7 +45,7 @@ export class CodigoQRPage implements OnInit {
         this.scanResult = data?.barcode?.displayValue;
       }
     } else {
-      // Escaneo en web con webcam
+      // Escaneo en web con webcam en caso de estar en un navegador web
       this.scanWithWebcam();
     }
   }
@@ -63,6 +63,7 @@ export class CodigoQRPage implements OnInit {
 
   }
 
+  //Función que permite el escaneo por navegador web
   scanWithWebcam() {
     const qrCodeRegion = document.getElementById('qr-code-region');
     const scanButtons = document.getElementById('scan-buttons');
