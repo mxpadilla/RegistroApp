@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NoAuthenticationGuard } from './guards/no-auth.guard';
 import { AuthenticationGuard } from './guards/auth.guard';
+import { QRGuard } from './guards/qr-guard.guard';
 
 const routes: Routes = [
   {
@@ -21,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'codigo-qr',
-    canActivate: [AuthenticationGuard],
+    canActivate: [QRGuard],
     loadChildren: () => import('./pages/codigo-qr/codigo-qr.module').then( m => m.CodigoQRPageModule) 
   },
   {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { LoginService } from 'src/app/services/login.service';
 import { NavegacionService } from 'src/app/services/navegacion.service';
@@ -63,13 +63,24 @@ export class InicioPage implements OnInit {
     console.log('Ruta anterior: ', this.urlPrevia);
 
     this.getCurrentPosition(); // Ubicación actual del usuario
-
-    this.loadWeatherData(-33.45, -70.65); // Coordenadas de Santiago, Chile = -33.45, -70.65
   }
 
-  volver(){
-    this.navegacion.volverAtras(); // Volver a la página anterior
+  // Obtener ubicación actual del usuario
+async getCurrentPosition() {
+  try {
+    const position = await this.ubicacion.getPosition();
+    this.latitude = position.coords.latitude;
+    this.longitude = position.coords.longitude;
+
+    // Cargar datos del clima con las coordenadas obtenidas
+    this.loadWeatherData(this.latitude, this.longitude);
+  } catch (error) {
+    console.error('Error al obtener la ubicación:', error);
+
+    // Si no se puede obtener la ubicación, usar coordenadas por defecto (Santiago, Chile)
+    this.loadWeatherData(-33.45, -70.65);
   }
+}
 
   //Cargar datos del clima
   loadWeatherData(lat: number, lon: number) {
@@ -126,8 +137,11 @@ export class InicioPage implements OnInit {
     if (this.isWithinRange === true) {
       console.log(`Latitud: ${this.latitude} | Longitud: ${this.longitude}`)
       setTimeout(() => {
-        this.router.navigate(['/codigo-qr']);
-      }, 3000);  
+        const navigationExtras: NavigationExtras = {
+          state: { fromApp: true }
+        };
+        this.router.navigate(['/codigo-qr'], navigationExtras);
+      }, 3000);
     }
     else {
       // En caso contrario, se muestra la distancia objetivo, distancia restante y ubicación actual en la consola
@@ -135,21 +149,6 @@ export class InicioPage implements OnInit {
       console.log(`Distancia restante: ${this.difDistancia.toFixed(2)} km`);
       console.log(`Latitud: ${this.latitude} | Longitud: ${this.longitude}`)
     }
-  }
-
-  //Obtener ubicación actual del usuario
-  async getCurrentPosition() {
-    this.ubicacion
-      .getPosition()
-      .then(position => {
-        this.latitude = position.coords.latitude;
-        this.longitude = position.coords.longitude;
-        return {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        }
-      });
-      
   }
 
   //Función para cerrar sesión del usuario
@@ -178,5 +177,4 @@ export class InicioPage implements OnInit {
     this.router.navigateByUrl('/login');
   }
 
-  
 }
