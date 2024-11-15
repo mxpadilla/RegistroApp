@@ -11,7 +11,7 @@ export class QRGuard implements CanActivate {
         private readonly loginService: LoginService
     ){ }
     async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      console.log('Executing guard!');
+      console.log('Ejecutando qr-guard.');
 
       // Verificar si el usuario está autenticado
       const auth = await this.loginService.isAuthenticated();
@@ -27,7 +27,7 @@ export class QRGuard implements CanActivate {
       }
 
       if (!fromApp) {
-          console.log('Acceso directo detectado, redireccionando a la página actual');
+          console.log('Acceso directo detectado, redireccionando a la página de inicio');
           await this.router.navigate(['/inicio']);
           return false;
       }

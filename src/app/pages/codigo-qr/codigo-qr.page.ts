@@ -63,12 +63,16 @@ export class CodigoQRPage implements OnInit {
 
   }
 
-  //Función que permite el escaneo por navegador web
+  // Función que permite el escaneo por navegador web
   scanWithWebcam() {
     const qrCodeRegion = document.getElementById('qr-code-region');
     const scanButtons = document.getElementById('scan-buttons');
+    const placeholderImage = document.getElementById('placeholder-image');
   
     // Mostrar contenedor y botones
+    if (placeholderImage) {
+      placeholderImage.style.display = 'none'; // Ocultar el placeholder al iniciar el escaneo
+    }
     qrCodeRegion!.style.display = 'block';
     scanButtons!.style.display = 'block';
   
@@ -77,7 +81,7 @@ export class CodigoQRPage implements OnInit {
     this.html5QrCode.start(
       { facingMode: 'environment' }, // Usar la cámara trasera si está disponible
       {
-        fps: 10, // Cuadros por segundo
+        fps: 10,
         qrbox: 250 // Tamaño del área de escaneo
       },
       (decodedText, decodedResult) => {
@@ -96,13 +100,25 @@ export class CodigoQRPage implements OnInit {
   stopScan() {
     const qrCodeRegion = document.getElementById('qr-code-region');
     const scanButtons = document.getElementById('scan-buttons');
+    const placeholderImage = document.getElementById('placeholder-image');
   
     // Detener el escáner y ocultar los elementos
     this.html5QrCode?.stop().then(() => {
       qrCodeRegion!.style.display = 'none';
+      this.html5QrCode?.clear();
+      qrCodeRegion!.style.display = 'block';
       scanButtons!.style.display = 'none';
+      
+      if (placeholderImage) {
+        placeholderImage.style.display = 'block';
+      }
     }).catch((err) => {
       console.error(`Error stopping Html5Qrcode: ${err}`);
+      
+      // Mostrar el placeholder en caso de error si existe
+      if (placeholderImage) {
+        placeholderImage.style.display = 'block';
+      }
     });
   }
 

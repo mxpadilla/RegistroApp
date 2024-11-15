@@ -21,6 +21,7 @@ export class LoginPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.limpiarDatos()
   }
 
   validateLogin() {
@@ -56,7 +57,7 @@ export class LoginPage implements OnInit {
       .then(() => console.log('Redireccionando al inicio'));
   }
 
-  //función que permite mostrar un mensaje según los parametros dados
+  // Función que permite mostrar un mensaje según los parametros dados
   async mensajeConfirmacion(message: string, color: string){
     const toast = await this.toastController.create({
       message: message,
@@ -65,6 +66,17 @@ export class LoginPage implements OnInit {
       color: color
     });
     await toast.present();
+  }
+
+  // Función que permite limpiar datos de los campos
+  limpiarDatos(){
+    this.username= '';
+    this.password= '';
+  }
+
+  // Función que hace que al entrar a la página se ejecute siempre la función, en este caso es de 'limpiarDatos'
+  ionViewWillEnter() {
+    this.limpiarDatos();
   }
 
 

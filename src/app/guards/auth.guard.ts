@@ -11,7 +11,7 @@ export class AuthenticationGuard implements CanActivate {
         private readonly loginService: LoginService
     ){ }
     async canActivate() {
-        console.log('Executing guard!')
+        console.log('Ejecutando guard.')
         const auth = await this.loginService.isAuthenticated();
         if (!auth) {
             console.log('Usuario no esta ingresado, redireccionando a la página 404')

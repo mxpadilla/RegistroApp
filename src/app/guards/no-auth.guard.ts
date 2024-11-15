@@ -12,7 +12,7 @@ export class NoAuthenticationGuard implements CanActivate {
   ){ }
   async canActivate() {
 
-    console.log('Executing no-guard!')
+    console.log('Ejecutando no-guard.')
     const auth = await this.loginService.isAuthenticated();
     if (auth) {
         console.log('Usuario en sesión, redireccionando a Inicio')

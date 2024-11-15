@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="warning">
-    <ion-title id="boldStyle" class="centrado">Inicio</ion-title>
+    <ion-title id="boldStyle" class="centrado"><ion-icon name="home-sharp"></ion-icon> Inicio</ion-title>
     <ion-button slot="end" (click)="confirmLogout()" color="light" class="boton-salir">Salir<ion-icon name="power" slot="start"></ion-icon></ion-button>
   </ion-toolbar>
 </ion-header>
@@ -10,8 +10,8 @@
   <div>
     <ion-card class="borde-card">
       <ion-card color="warning">
-        <ion-title>
-          <h1>Temperatura actual</h1>
+        <ion-title id="boldStyle" class="ion-padding">
+          Temperatura
         </ion-title>
       </ion-card>
       <ion-row class="termometro-size">
@@ -34,6 +34,7 @@
       <ion-col size="12">
         <ion-button (click)="checkIfWithinRange()" class="submit" color="warning" id="boldStyle">
           Confirmar asistencia
+          <ion-icon name="qr-code-sharp" slot="start"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
