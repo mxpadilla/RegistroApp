@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { NavegacionService } from 'src/app/services/navegacion.service';
 
 @Component({
@@ -17,7 +17,8 @@ export class PassRecoveryPage implements OnInit {
   constructor(
     private router: Router,
     private alertController: AlertController,
-    private navegacion: NavegacionService
+    private navegacion: NavegacionService,
+    private loadingController: LoadingController
   ) { }
 
   async mostrarConfirmacion() {
@@ -34,17 +35,39 @@ export class PassRecoveryPage implements OnInit {
         },
         {
           text: 'Aceptar',
-          handler: () => {
+          handler: async () => {
             console.log('Operación confirmada');
-            //codigo para realizar el cambio de contraseña en un futuro
-            console.log('Redireccionando al Login');
-            this.router.navigate(['/login']);
+            await this.procesarRestablecimiento();
           }
         }
       ]
     });
-
+  
     await alert.present();
+  }
+
+  private async procesarRestablecimiento() {
+    // Muestra el spinner
+    const loading = await this.loadingController.create({
+      message: 'Procesando restablecimiento.',
+      spinner: 'crescent',
+    });
+    await loading.present();
+  
+    try {
+      // Aquí puedes agregar la lógica para el cambio de contraseña
+      console.log('Procesando cambio de contraseña.');
+  
+      // Simulación de un retraso para representar el procesamiento
+      await new Promise(resolve => setTimeout(resolve, 2000));
+  
+      console.log('Redireccionando al Login');
+      await this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Error durante el restablecimiento:', error);
+    } finally {
+      await loading.dismiss();
+    }
   }
 
   ngOnInit() {

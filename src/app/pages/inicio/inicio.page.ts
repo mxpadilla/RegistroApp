@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { LoginService } from 'src/app/services/login.service';
 import { NavegacionService } from 'src/app/services/navegacion.service';
 import { TemperaturaService } from 'src/app/services/temperatura.service';
@@ -49,7 +49,8 @@ export class InicioPage implements OnInit {
     private clima: TemperaturaService,
     private ubicacion: UbicacionService,
     private alertController: AlertController,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private loadingController: LoadingController
   ) { 
     const state = this.router.getCurrentNavigation()?.extras?.state;
     if(state){
@@ -114,6 +115,13 @@ async getCurrentPosition() {
 
   // Verificar si el usuario está dentro del rango
   async checkIfWithinRange() {
+
+    const loading = await this.loadingController.create({
+      message: 'Verificando ubicación actual.',
+      spinner: 'crescent',
+    });
+    await loading.present();
+
     try {
       await this.getCurrentPosition();
       this.distancia = this.calculateDistance(
@@ -131,6 +139,7 @@ async getCurrentPosition() {
     } catch (error) {
       console.error('Error al verificar la ubicación:', error);
       this.isWithinRange = null;
+      await loading.dismiss();
     }
 
     // Si se cumple esta condición, se realiza la redirección de forma automática
@@ -147,8 +156,10 @@ async getCurrentPosition() {
       // En caso contrario, se muestra la distancia objetivo, distancia restante y ubicación actual en la consola
       console.log(`Distancia de la sede: ${this.distancia.toFixed(2)} km`);
       console.log(`Distancia restante: ${this.difDistancia.toFixed(2)} km`);
-      console.log(`Latitud: ${this.latitude} | Longitud: ${this.longitude}`)
+      console.log(`Latitud: ${this.latitude} | Longitud: ${this.longitude}`);
+      await loading.dismiss();
     }
+    
   }
 
   //Función para cerrar sesión del usuario
@@ -172,9 +183,23 @@ async getCurrentPosition() {
     .then(a => a.present());
   }
 
-  private logout(){
-    this.loginService.logout()
-    this.router.navigateByUrl('/login');
+  private async logout() {
+    // Muestra el spinner
+    const loading = await this.loadingController.create({
+      message: 'Cerrando sesión.',
+      spinner: 'crescent',
+    });
+    await loading.present();
+  
+    try {
+      await this.loginService.logout();
+      await this.router.navigateByUrl('/login');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    } finally {
+      // Oculta el spinner
+      await loading.dismiss();
+    }
   }
 
 }

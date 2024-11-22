@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { User } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 
@@ -17,15 +17,23 @@ export class LoginPage implements OnInit {
   constructor(
     private router: Router,
     private toastController: ToastController,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private loadingController: LoadingController
   ) { }
 
   ngOnInit() {
     this.limpiarDatos()
   }
 
-  validateLogin() {
+  async validateLogin() {
     console.log("Executing login validation")
+
+    const loading = await this.loadingController.create({
+      message: 'Validando Inicio de Sesión.',
+      spinner: 'crescent',
+    });
+  
+    await loading.present();
 
     this.loginService
       .authenticate(this.username, this.password)
@@ -35,6 +43,9 @@ export class LoginPage implements OnInit {
       .catch(err => {
         console.log('Error en login: ', err)
         this.failedAuthentication();
+      }).finally(() => {
+        // Oculta el spinner independientemente del resultado
+        loading.dismiss();
       });
   }
 
