@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { User } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -26,55 +25,67 @@ export class LoginPage implements OnInit {
   }
 
   async validateLogin() {
-    console.log("Executing login validation")
-
     const loading = await this.loadingController.create({
       message: 'Validando Inicio de Sesión.',
       spinner: 'crescent',
     });
-  
     await loading.present();
 
-    this.loginService
-      .authenticate(this.username, this.password)
-      .then(user => {
-        this.authenticateHandler(user);
-      })
-      .catch(err => {
-        console.log('Error en login: ', err)
-        this.failedAuthentication();
-      }).finally(() => {
-        // Oculta el spinner independientemente del resultado
-        loading.dismiss();
-      });
+    try {
+      // Llamar al servicio de login para autenticar al usuario
+      const loginSuccess = await this.loginService.login(this.username, this.password);
+      
+      if (loginSuccess) {
+        await loading.dismiss();
+        this.successAuthentication();
+      } else {
+        const userExists = await this.checkUserExists(this.username);
+        await loading.dismiss();
+
+        if (userExists) {
+          this.failedAuthentication('Contraseña incorrecta');
+        } else {
+          this.failedAuthentication('Usuario no encontrado');
+        }
+      }
+    } catch (error) {
+      await loading.dismiss();
+      this.failedAuthentication('Error al conectar con el servidor');
+      console.error('Error en la autenticación:', error);
+    }
   }
 
-  private authenticateHandler(user: User | null) {
-    user ? this.successAuthentication() : this.failedAuthentication()
+  // Verificar si el usuario existe (pero con contraseña incorrecta)
+  private async checkUserExists(username: string): Promise<boolean> {
+    try {
+      const users: any[] = await this.loginService.getAllUsers(); // Crear método adicional en LoginService
+      return users.some(user => user.username === username);
+    } catch (error) {
+      console.error('Error al verificar usuario:', error);
+      return false;
+    }
   }
 
-  private failedAuthentication(message: string = 'Sesión iniciada de forma fallida') {
-    this.mensajeConfirmacion(message, 'danger')
-      .then(() => { console.log('Login fallido') });
+  private async failedAuthentication(message: string = 'Sesión iniciada de forma fallida') {
+    await this.mensajeConfirmacion(message, 'danger');
+    console.log('Login fallido');
   }
 
-  private successAuthentication() {
-    this.mensajeConfirmacion('Sesión iniciada de forma exitosa', 'success')
-      .then(() => {
-        console.log('Success login');
-        let extras: NavigationExtras = {state: {user: this.username}}
-        this.router.navigate(['/inicio'], extras);
-      })
-      .then(() => console.log('Redireccionando al inicio'));
+  private async successAuthentication() {
+    await this.mensajeConfirmacion('Sesión iniciada de forma exitosa', 'success');
+    console.log('Success login');
+    const extras: NavigationExtras = { state: { user: this.username } };
+    this.router.navigate(['/inicio'], extras);
+    console.log('Redireccionando al inicio');
   }
 
-  // Función que permite mostrar un mensaje según los parametros dados
-  async mensajeConfirmacion(message: string, color: string){
+  // Función que permite mostrar un mensaje según los parámetros dados
+  async mensajeConfirmacion(message: string, color: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000,
       position: 'bottom',
-      color: color
+      color: color,
     });
     await toast.present();
   }

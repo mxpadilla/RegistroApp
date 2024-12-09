@@ -10,30 +10,32 @@ export class QRGuard implements CanActivate {
         private readonly router: Router,
         private readonly loginService: LoginService
     ){ }
-    async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      console.log('Ejecutando qr-guard.');
-
-      // Verificar si el usuario está autenticado
-      const auth = await this.loginService.isAuthenticated();
-
-      // Verificar si la navegación provino desde la aplicación
-      const navigation = this.router.getCurrentNavigation();
-      const fromApp = navigation?.extras.state?.["fromApp"];
-
-      if (!auth) {
-          console.log('Usuario no está ingresado, redireccionando a la página 404');
+    async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+        console.log('Ejecutando qr-guard.');
+    
+        // Verificar si el usuario está autenticado
+        const user = await this.loginService.getUser();
+        const isAuthenticated = !!user;
+    
+        // Verificar si la navegación provino desde la aplicación
+        const navigation = this.router.getCurrentNavigation();
+        const fromApp = navigation?.extras.state?.['fromApp'] === true; // Esperamos una bandera "fromApp" en el estado de navegación
+    
+        if (!isAuthenticated) {
+          console.log('Usuario no está autenticado, redireccionando a la página 404.');
           await this.router.navigate(['/404']);
           return false;
-      }
-
-      if (!fromApp) {
-          console.log('Acceso directo detectado, redireccionando a la página de inicio');
+        }
+    
+        if (!fromApp) {
+          console.log('Acceso directo detectado, redireccionando a la página de inicio.');
           await this.router.navigate(['/inicio']);
           return false;
+        }
+    
+        // Si está autenticado y la navegación es válida, permite el acceso
+        console.log('Usuario autenticado y navegación válida. Acceso permitido.');
+        return true;
       }
-
-      // Si está autenticado y la navegación es por la app, permite el acceso
-      return true;
-  }
 }
 

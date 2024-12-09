@@ -29,7 +29,7 @@ export class InicioPage implements OnInit {
 
   /*
     Variables para detectar rango de la ubicación donde:
-      1. Se obtiene el estado de este
+      1. Se obtiene si esta el rango definido
       2. Se obtiene la distancia actual
       3. Se obtiene la distancia restante calculada
   */
@@ -136,6 +136,7 @@ async getCurrentPosition() {
 
       // Actualizamos el estado de 'isWithinRange'
       this.isWithinRange = this.distancia <= this.rangeKm;
+      await loading.dismiss();
     } catch (error) {
       console.error('Error al verificar la ubicación:', error);
       this.isWithinRange = null;

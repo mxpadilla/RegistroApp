@@ -10,14 +10,17 @@ export class NoAuthenticationGuard implements CanActivate {
       private readonly router: Router,
       private readonly loginService: LoginService
   ){ }
-  async canActivate() {
+  async canActivate(): Promise<boolean> {
+    console.log('Ejecutando no-guard.');
+    
+    const user = await this.loginService.getUser(); // Obtener el usuario desde el almacenamiento
+    const isAuthenticated = !!user; // Determinar si hay un usuario autenticado
 
-    console.log('Ejecutando no-guard.')
-    const auth = await this.loginService.isAuthenticated();
-    if (auth) {
-        console.log('Usuario en sesión, redireccionando a Inicio')
-        await this.router.navigate(['/inicio']);
+    if (isAuthenticated) {
+      console.log('Usuario ya en sesión, redireccionando a Inicio');
+      await this.router.navigate(['/inicio']);
     }
-    return !auth;
+
+    return !isAuthenticated; // Permite la activación si no hay usuario autenticado
   }
 }

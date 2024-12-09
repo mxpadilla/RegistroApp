@@ -1,63 +1,53 @@
 import { Injectable } from '@angular/core';
-import { User }  from '../models/user';
 import { StorageService } from './almacenamiento.service';
-import { UserService } from './usuario.service';
-import { firstValueFrom } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  loggedUser: User | null = null;
-  isLogged: boolean = false;
-
-  private readonly logged_user_key = 'logged_user';
+  private apiUrl = 'http://localhost:3000/users';
 
   constructor(
-    private readonly storageService: StorageService,
-    private readonly userService: UserService
+    private http: HttpClient,
+    private storage: StorageService
   ) { }
 
-  async authenticate(u: string, p: string): Promise<User | null> {
-    const founds = await firstValueFrom(this.userService.findUserByUsername(u));
+  async login(username: string, password: string): Promise<boolean> {
+    try {
+      // Obtén los usuarios desde el servidor JSON
+      const users: any = await this.http.get(this.apiUrl).toPromise();
+      const user = users.find(
+        (u: any) => u.username === username && u.password === password
+      );
 
-    if (founds.length > 0) {
-      const found = founds[0]
-      console.log('It found user: ', found.username)
-      const matchPwd = found.password === p;
-      if (matchPwd) {
-        this.loggedUser = found;
-        this.isLogged = true;
-        await this.storageService.set(this.logged_user_key, this.loggedUser);
+      if (user) {
+        // Guarda los datos del usuario en el almacenamiento local
+        await this.storage.set('user', user);
+        return true;
       }
-      return found
+      return false;
+    } catch (error) {
+      console.error('Error al autenticar:', error);
+      return false;
     }
-    console.log('It didn\'t find user', u);
-    return null;
   }
 
-  async isAuthenticated() {
-    console.log(this.loggedUser)
-    console.log(this.isLogged)
-    const userInMemory = this.loggedUser !== null;
-    console.log("user exist: " + userInMemory)
-    if (!userInMemory) {
-      const user = await this.storageService.get(this.logged_user_key);
-      if (user) {
-        console.log('LoginService encontró el usuario')
-        this.isLogged = true;
-        this.loggedUser = user;
-      }
-    }
-    return this.isLogged;
+  async getUser() {
+    return await this.storage.get('user');
   }
 
   async logout() {
-    this.loggedUser = null;
-    this.isLogged = false;
-    return this.storageService
-      .remove(this.logged_user_key)
-      .then(() => console.log('Usuario eliminado del almacenamiento'));
+    await this.storage.remove('user');
+  }
+
+  async getAllUsers(): Promise<any> {
+    try {
+      return await this.http.get<any>(this.apiUrl).toPromise();
+    } catch (error) {
+      console.error('Error al obtener usuarios:', error);
+      return [];
+    }
   }
 }

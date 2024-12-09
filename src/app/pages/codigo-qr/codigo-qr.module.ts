@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { CodigoQRPageRoutingModule } from './codigo-qr-routing.module';
 
 import { CodigoQRPage } from './codigo-qr.page';
-import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 
 @NgModule({
   imports: [
@@ -16,6 +15,6 @@ import { BarcodeScanningModalComponent } from './barcode-scanning-modal.componen
     IonicModule,
     CodigoQRPageRoutingModule
   ],
-  declarations: [CodigoQRPage, BarcodeScanningModalComponent]
+  declarations: [CodigoQRPage]
 })
 export class CodigoQRPageModule {}

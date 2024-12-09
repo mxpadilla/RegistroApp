@@ -10,13 +10,17 @@ export class AuthenticationGuard implements CanActivate {
         private readonly router: Router,
         private readonly loginService: LoginService
     ){ }
-    async canActivate() {
-        console.log('Ejecutando guard.')
-        const auth = await this.loginService.isAuthenticated();
-        if (!auth) {
-            console.log('Usuario no esta ingresado, redireccionando a la página 404')
-            await this.router.navigate(['/404']);
+    async canActivate(): Promise<boolean> {
+        console.log('Ejecutando guard.');
+    
+        const user = await this.loginService.getUser(); // Obtener el usuario desde el almacenamiento
+        const isAuthenticated = !!user; // Determinar si hay un usuario autenticado
+    
+        if (!isAuthenticated) {
+          console.log('Usuario no está autenticado, redireccionando a la página 404');
+          await this.router.navigate(['/404']);
         }
-        return auth;
-    }
+    
+        return isAuthenticated; // Permite la activación si hay usuario autenticado
+      }
 }
