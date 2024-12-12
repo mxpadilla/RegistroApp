@@ -41,7 +41,7 @@ export class InicioPage implements OnInit {
   // Ejemplo: Sede Duoc San Joaquín (estimado)
   targetLat = -33.4999675;  
   targetLon = -70.6164588;
-  rangeKm: number = 0.5;  // Rango de 500 metros
+  rangeKm: number = 1.5;  // Rango de 500 metros
 
   constructor(
     private router: Router,

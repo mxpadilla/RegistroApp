@@ -6,17 +6,30 @@
 
 <ion-content class="ion-text-center">
 
-  <div style="margin: auto;">
+  <div>
+    <div class="instruccion" style="color: white;">
+      Selecciona una asignatura y escanea el código QR
+    </div>
 
-    <h6>Inscribe tu asistencia escaneando el código QR</h6>
+    <div class="margenElemento">
+      <img src="assets/images/scan-qr.webp" alt="">
+    </div>
     
-    <img src="assets/images/scan-qr.webp" alt="">
+    <!-- Dropdown para seleccionar la asignatura -->
+    <ion-item class="margenListado">
+      <ion-label style="font-weight: bold;">Asignatura</ion-label>
+      <ion-select [(ngModel)]="selectedAsignatura">
+        <ion-select-option *ngFor="let asignatura of asignaturas" [value]="asignatura">
+          {{ asignatura.nombre }} 
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
 
     <!-- Cuadro de escaneo QR -->
-    <div *ngIf="scannedResult">
+    <div *ngIf="scannedResult" class="margenResultado">
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Resultado</ion-card-title>
+          <ion-card-title>Resultado del escaneo</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           {{ scannedResult }}
@@ -25,18 +38,17 @@
     </div>
 
     <!-- Botón para volver a la página anterior -->
-    <div>
+    <div class="margenResultado">
       <ion-button (click)="volver()" color="warning" id="boldStyle">
         Volver al inicio
         <ion-icon name="caret-back-outline" slot="start"></ion-icon>
       </ion-button>
     </div>
-
-</div>
+  </div>
 
   <!-- Botón flotante para escanear y guardar QRs -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="scan()">
+    <ion-fab-button (click)="scan()" color="warning">
       <ion-icon name="qr-code-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>

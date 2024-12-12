@@ -1,21 +1,109 @@
 {
-
-    "users": [{
-        "id": 1,
-        "username": "UserTest",
-        "password": "12345"
-    }, 
+  "users": [
     {
-        "id": 2,
-        "username": "Maximiliano",
-        "password": "54321"
+      "id": "1",
+      "username": "UserTest",
+      "password": "12345",
+      "asignaturas": [
+        {
+          "nombre": "PLC1101",
+          "seccion": "043D",
+          "sala": "L801"
+        },
+        {
+          "nombre": "PGY1121",
+          "seccion": "004D",
+          "sala": "L3"
+        },
+        {
+          "nombre": "MAT1110",
+          "seccion": "040D",
+          "sala": "L5"
+        }
+      ]
     },
     {
-        "id": 3,
-        "username": "Fernanda",
-        "password": "67890"
+      "id": "2",
+      "username": "Maximiliano",
+      "password": "54321",
+      "asignaturas": [
+        {
+          "nombre": "PGY4121",
+          "seccion": "006D",
+          "sala": "L2"
+        },
+        {
+          "nombre": "GPY6111",
+          "seccion": "001D",
+          "sala": "L804"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "username": "Fernanda",
+      "password": "67890",
+      "asignaturas": [
+        {
+          "nombre": "MDY2131",
+          "seccion": "010D",
+          "sala": "L3"
+        },
+        {
+          "nombre": "MAT2120",
+          "seccion": "012D",
+          "sala": "L5"
+        },
+        {
+          "nombre": "PGY2121",
+          "seccion": "012D",
+          "sala": "L4"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "username": "Marcelo",
+      "password": "45892",
+      "asignaturas": [
+        {
+          "nombre": "PGY3121",
+          "seccion": "011D",
+          "sala": "L6"
+        },
+        {
+          "nombre": "MDY3131",
+          "seccion": "009D",
+          "sala": "L11"
+        },
+        {
+          "nombre": "EMP1101",
+          "seccion": "015D",
+          "sala": "L501"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "username": "Carolina",
+      "password": "59674",
+      "asignaturas": [
+        {
+          "nombre": "INI5111",
+          "seccion": "001D",
+          "sala": "L505"
+        },
+        {
+          "nombre": "ASY4131",
+          "seccion": "001D",
+          "sala": "L7"
+        },
+        {
+          "nombre": "PGY4121",
+          "seccion": "001D",
+          "sala": "L3"
+        }
+      ]
     }
-    ]
-
+  ]
 }
-

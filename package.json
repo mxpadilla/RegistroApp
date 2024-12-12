@@ -35,8 +35,10 @@
     "@ionic/storage": "^4.0.0",
     "@ionic/storage-angular": "^4.0.0",
     "cordova-sqlite-storage": "^6.1.0",
+    "cors": "^2.8.5",
     "html5-qrcode": "^2.3.8",
     "ionicons": "^7.0.0",
+    "json-server": "^1.0.0-beta.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"

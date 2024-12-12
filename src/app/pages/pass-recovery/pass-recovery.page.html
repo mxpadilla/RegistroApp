@@ -1,21 +1,32 @@
 <ion-header>
-  <ion-toolbar color="warning"></ion-toolbar>
+  <ion-toolbar color="warning">
+    <ion-title id="boldStyle" class="centrado">Recuperar contraseña</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  
-  <ion-card>
+  <ion-card class="margenElemento">
     <ion-card-header>
       <div class="ion-text-center">
-        <ion-card-title id="boldStyle">Recuperar contraseña</ion-card-title>
+        <ion-card-title id="boldStyle">Ingrese una Nueva Contraseña</ion-card-title>
       </div>
     </ion-card-header>
     <ion-card-content>
       <ion-item>
-        <ion-input [(ngModel)]="userRecovery" label="Nombre de Usuario" labelPlacement="stacked" id="size20"></ion-input>
+        <ion-input
+          [(ngModel)]="userRecovery"
+          label="Nombre de Usuario"
+          labelPlacement="stacked"
+          id="size20">
+        </ion-input>
       </ion-item>
       <ion-item>
-        <ion-input [(ngModel)]="passRecovery" label="Nueva Contraseña" labelPlacement="stacked" id="size20" type="password">
+        <ion-input
+          [(ngModel)]="passRecovery"
+          label="Nueva Contraseña"
+          labelPlacement="stacked"
+          id="size20"
+          type="password">
           <ion-input-password-toggle slot="end"></ion-input-password-toggle>
         </ion-input>
       </ion-item>
@@ -29,7 +40,6 @@
   <div class="ion-text-center">
     <ion-button (click)="volver()" color="warning" id="boldStyle">Volver al Inicio</ion-button>
   </div>
-
 </ion-content>
 
 <ion-footer>

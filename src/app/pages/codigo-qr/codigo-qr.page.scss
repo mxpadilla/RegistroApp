@@ -11,4 +11,28 @@ img {
     width: 200px;
 }
 
+.instruccion{
+    margin-top: 25%;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-weight: bold;
+}
 
+.margenElemento{
+    margin-top: 20%;
+    margin-bottom: 20%;
+}
+
+.margenListado{
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.margenResultado{
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+ion-content {
+    --background: #353535; /* Cambia el color del fondo */
+  }

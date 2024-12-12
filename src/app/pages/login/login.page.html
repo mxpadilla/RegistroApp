@@ -3,7 +3,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
+  <ion-card class="margenElemento">
     <ion-card-header>
       <div class="ion-text-center">
         <ion-card-title id="boldStyle">Iniciar sesión</ion-card-title>
@@ -25,15 +25,17 @@
     </ion-card-content>
   </ion-card>
 
-  <div class="ion-text-center">
-    <a [routerLink]="['/pass-recovery']">Recuperar contraseña</a>
-  </div>
+  <ion-card style="padding: 5%;">
+    <div class="ion-text-center">
+      <a [routerLink]="['/pass-recovery']">Recuperar contraseña</a>
+    </div>
+  </ion-card>
 
 </ion-content>
 
 <ion-footer>
   <ion-toolbar color="warning">
-    
+    <ion-title id="boldStyle">Desarrollado por: Maximiliano P.</ion-title>
   </ion-toolbar>
 </ion-footer>
 

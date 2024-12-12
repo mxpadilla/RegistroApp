@@ -10,7 +10,7 @@
   <div>
     <ion-card class="borde-card">
       <ion-card color="warning">
-        <ion-title id="boldStyle" class="ion-padding">
+        <ion-title id="boldStyle" class="ion-padding" style="color: black;">
           Temperatura
         </ion-title>
       </ion-card>
@@ -39,7 +39,7 @@
       </ion-col>
     </ion-row>
 
-    <div *ngIf="isWithinRange !== null" class="resultado">
+    <div *ngIf="isWithinRange !== null" class="resultado" style="color: white;">
       <!-- <p>Distancia de la sede: {{ distance | number:'1.2-2' }} km</p> -->
       <p *ngIf="isWithinRange; else fueraRango">
         ⌛ Redireccionando en 3 segundos ⌛

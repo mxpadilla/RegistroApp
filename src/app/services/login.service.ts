@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LoginService {
 
-  private apiUrl = 'http://localhost:3000/users';
+  private apiUrl = 'http://localhost:3000/users'; //cambiar localhost a la IP correspondiente
 
   constructor(
     private http: HttpClient,
@@ -18,6 +18,7 @@ export class LoginService {
     try {
       // Obtén los usuarios desde el servidor JSON
       const users: any = await this.http.get(this.apiUrl).toPromise();
+      console.log('Usuarios obtenidos de la API:', users);
       const user = users.find(
         (u: any) => u.username === username && u.password === password
       );
@@ -50,4 +51,29 @@ export class LoginService {
       return [];
     }
   }
+
+  async updatePassword(username: string, newPassword: string): Promise<boolean> {
+    try {
+      // Obtén la lista completa de usuarios
+      const users: any = await this.getAllUsers();
+  
+      // Busca al usuario por nombre de usuario
+      const user = users.find((u: any) => u.username === username);
+      if (!user) {
+        throw new Error('Usuario no encontrado');
+      }
+  
+      // Actualiza la contraseña en el usuario encontrado
+      user.password = newPassword;
+  
+      // Envía la solicitud PUT para actualizar la contraseña
+      await this.http.put(`${this.apiUrl}/${user.id}`, user).toPromise();
+  
+      return true; // Retorna éxito si todo salió bien
+    } catch (error) {
+      console.error('Error al actualizar la contraseña:', error);
+      return false;
+    }
+  }
+
 }

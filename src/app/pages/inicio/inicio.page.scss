@@ -1,10 +1,12 @@
 #nombreUser{
     padding: 5%;
     font-size: 200%;
+    color: white;
 }
 
 #iconUser {
     font-size: 1000%;
+    color: white;
   }
 
 #boldStyle{
@@ -38,6 +40,10 @@
 .calor {
     margin-left: 14%;
 }
+
+ion-content {
+    --background: #353535; /* Cambia el color del fondo */
+  }
 
 
 
